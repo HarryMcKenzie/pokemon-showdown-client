@@ -69,44 +69,56 @@ https://psim.us/dev
 	var LM = document.getElementById('loading-message');
 	LM.innerHTML += ' DONE<br />Loading libraries...';
 </script>
-<script nomodule src="//play.pokemonshowdown.com/js/lib/ps-polyfill.js"></script>
-<script src="//play.pokemonshowdown.com/config/config.js?"></script>
-<script src="//play.pokemonshowdown.com/js/lib/jquery-2.2.4.min.js"></script>
-<script src="//play.pokemonshowdown.com/js/lib/jquery-cookie.js"></script>
-<script src="//play.pokemonshowdown.com/js/lib/autoresize.jquery.min.js?"></script>
-<script src="//play.pokemonshowdown.com/js/battle-sound.js?"></script>
-<script src="//play.pokemonshowdown.com/js/lib/html-css-sanitizer-minified.js?"></script>
-<script src="//play.pokemonshowdown.com/js/lib/lodash.core.js?"></script>
-<script src="//play.pokemonshowdown.com/js/lib/backbone.js?"></script>
-<script src="//play.pokemonshowdown.com/js/lib/d3.v3.min.js"></script>
+<script nomodule src="/js/lib/ps-polyfill.js"></script>
+<script src="/config/config.js?"></script>
+<script>
+	if (location.hostname !== Config.routes.client) {
+		const port = parseInt(location.port, 10) || (location.protocol === 'https:' ? 443 : 80);
+		Config.defaultserver = {
+			...Config.defaultserver,
+			host: location.hostname,
+			port,
+			httpport: location.protocol === 'https:' ? port : undefined,
+			altport: location.protocol === 'https:' ? 80 : undefined,
+		};
+	}
+</script>
+<script src="/js/lib/jquery-2.2.4.min.js"></script>
+<script src="/js/lib/jquery-cookie.js"></script>
+<script src="/js/lib/autoresize.jquery.min.js?"></script>
+<script src="/js/battle-sound.js?"></script>
+<script src="/js/lib/html-css-sanitizer-minified.js?"></script>
+<script src="/js/lib/lodash.core.js?"></script>
+<script src="/js/lib/backbone.js?"></script>
+<script src="/js/lib/d3.v3.min.js"></script>
 
 <script>
 	LM.innerHTML += ' DONE<br />Loading data...';
 </script>
 
-<script src="//play.pokemonshowdown.com/js/battledata.js?"></script>
-<script src="//play.pokemonshowdown.com/js/storage.js?"></script>
+<script src="/js/battledata.js?"></script>
+<script src="/js/storage.js?"></script>
 <script src="//play.pokemonshowdown.com/data/pokedex-mini.js?"></script>
 <script src="//play.pokemonshowdown.com/data/typechart.js?"></script>
-<script src="//play.pokemonshowdown.com/js/battle.js?"></script>
-<script src="//play.pokemonshowdown.com/js/lib/sockjs-1.4.0-nwjsfix.min.js"></script>
-<script src="//play.pokemonshowdown.com/js/lib/color-thief.min.js"></script>
+<script src="/js/battle.js?"></script>
+<script src="/js/lib/sockjs-1.4.0-nwjsfix.min.js"></script>
+<script src="/js/lib/color-thief.min.js"></script>
 
 <script>
 	LM.innerHTML += ' DONE<br />Loading client...';
 </script>
 
 <script src="//play.pokemonshowdown.com/data/commands.js?"></script>
-<script src="//play.pokemonshowdown.com/js/client.js?"></script>
-<script src="//play.pokemonshowdown.com/js/client-topbar.js?"></script>
-<script src="//play.pokemonshowdown.com/js/client-mainmenu.js?"></script>
-<script src="//play.pokemonshowdown.com/js/client-teambuilder.js?"></script>
-<script src="//play.pokemonshowdown.com/js/client-ladder.js?"></script>
-<script src="//play.pokemonshowdown.com/js/client-chat.js?"></script>
-<script src="//play.pokemonshowdown.com/js/client-chat-tournament.js?"></script>
-<script src="//play.pokemonshowdown.com/js/battle-tooltips.js?"></script>
-<script src="//play.pokemonshowdown.com/js/client-battle.js?"></script>
-<script src="//play.pokemonshowdown.com/js/client-rooms.js?"></script>
+<script src="/js/client.js?"></script>
+<script src="/js/client-topbar.js?"></script>
+<script src="/js/client-mainmenu.js?"></script>
+<script src="/js/client-teambuilder.js?"></script>
+<script src="/js/client-ladder.js?"></script>
+<script src="/js/client-chat.js?"></script>
+<script src="/js/client-chat-tournament.js?"></script>
+<script src="/js/battle-tooltips.js?"></script>
+<script src="/js/client-battle.js?"></script>
+<script src="/js/client-rooms.js?"></script>
 <script src="//play.pokemonshowdown.com/data/graphics.js?"></script>
 
 <script>
@@ -128,8 +140,7 @@ https://psim.us/dev
 
 <script src="//play.pokemonshowdown.com/data/search-index.js?"></script>
 <script src="//play.pokemonshowdown.com/data/teambuilder-tables.js?"></script>
-<script src="//play.pokemonshowdown.com/js/battle-dex-search.js?"></script>
-<script src="//play.pokemonshowdown.com/js/search.js?"></script>
+<script src="/js/battle-dex-search.js?"></script>
+<script src="/js/search.js?"></script>
 
 <script src="//play.pokemonshowdown.com/data/aliases.js?" async></script>
-<script src="//play.pokemonshowdown.com/js/clean-cookies.php" async></script>

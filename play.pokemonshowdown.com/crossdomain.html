@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<script src="/js/lib/jquery-2.2.4.min.js"></script>
+<body>
+<script>
+
+// Static replacement for crossdomain.php
+// Parses URL params to determine the requesting origin and provides
+// localStorage access via postMessage for cross-domain storage.
+
+var params = new URLSearchParams(location.search);
+var host = (params.get('host') || '').toLowerCase();
+var protocol = params.get('protocol') === 'https:' ? 'https:' : 'http:';
+var yourOrigin = protocol + '//' + host;
+var myOrigin = 'https://showdown.kawashironitori.com';
+
+// Build config for the requesting psim.us subdomain
+var config = {};
+if (/^([a-z0-9\-_.]*?)\.psim\.us$/.test(host)) {
+	var serverHost = host.replace(/\.psim\.us$/, '');
+	config.host = serverHost;
+	config.id = serverHost;
+	config.https = true;
+	config.port = 443;
+} else if (host === 'showdown.kawashironitori.com') {
+	config.host = 'showdown';
+}
+
+// Decode host encoding (dashes to dots etc.)
+if (config.host && config.host !== 'showdown') {
+	config.host = config.host.replace(/\b----\b/g, '::').replace(/---/g, '=').replace(/--/g, ':').replace(/-/g, '.').replace(/=/g, '-');
+	var result = /^(.*):([0-9]+)$/.exec(config.host);
+	if (result) {
+		config.host = result[1];
+		config.port = parseInt(result[2]);
+	}
+}
+
+function postReply(message) {
+	if (window.parent.postMessage === postReply) return;
+	return window.parent.postMessage(message, yourOrigin);
+}
+
+function messageHandler(e) {
+	if (e.origin !== yourOrigin) return;
+	var data = e.data;
+	if (typeof data !== 'string') return;
+
+	switch (data.charAt(0)) {
+	case 'T':
+		try { localStorage.setItem('showdown_teams', data.substr(1)); } catch (e) {}
+		break;
+	case 'P':
+		try { localStorage.setItem('showdown_prefs', data.substr(1)); } catch (e) {}
+		break;
+	case 'R':
+	case 'S':
+		var rq = JSON.parse(data.substr(1));
+		$.ajax({
+			type: (data.charAt(0) === 'R' ? 'GET' : 'POST'),
+			url: rq[0],
+			data: rq[1],
+			success: function(ajaxdata) {
+				postReply('r' + JSON.stringify([rq[2], ajaxdata]));
+			},
+			dataType: rq[3]
+		});
+		break;
+	}
+}
+
+window.addEventListener('message', messageHandler);
+if (config.host !== 'showdown') postReply('c' + JSON.stringify(config));
+
+var storageAvailable = false;
+try {
+	var testVal = '' + Date.now();
+	localStorage.setItem('showdown_allow3p', testVal);
+	if (localStorage.getItem('showdown_allow3p') === testVal) {
+		postReply('p' + localStorage.getItem('showdown_prefs'));
+		postReply('t' + localStorage.getItem('showdown_teams'));
+		postReply('a1');
+		storageAvailable = true;
+	}
+} catch (err) {}
+
+if (!storageAvailable) {
+	postReply('a0');
+}
+
+</script>

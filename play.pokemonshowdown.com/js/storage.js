@@ -339,7 +339,12 @@ Storage.initPrefs = function () {
 	Storage.loadTeams();
 	if (Config.testclient) {
 		return this.initTestClient();
-	} else if (location.protocol + '//' + location.hostname === Storage.origin) {
+	}
+	var useSameOriginStorage = (
+		location.protocol + '//' + location.hostname === Storage.origin ||
+		Config.defaultserver.host === location.hostname
+	);
+	if (useSameOriginStorage) {
 		// Same origin, everything can be kept as default
 		Config.server = Config.server || Config.defaultserver;
 		this.whenPrefsLoaded.load();
